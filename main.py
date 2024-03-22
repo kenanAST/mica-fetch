@@ -2,7 +2,6 @@ import requests
 
 
 ###Changes every 5 minutes
-
 headers = {
     "Authorization" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Impvc2h1YWtlbmFuLmNpbmNoZXNAZy5tc3VpaXQuZWR1LnBoIiwiaWF0IjoxNzExMDk3OTI2LCJleHAiOjE3MTEwOTk3MjZ9.MhwP1YChu714PqneNNDeEbdg7s0R8gVh5ZWrOdOhYl0"
 }
