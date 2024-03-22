@@ -6,7 +6,6 @@ import os
 
 load_dotenv()
 
-
 def get_token():
     url = 'https://mica.msuiit.edu.ph/'
     driver = webdriver.Chrome()
@@ -25,10 +24,6 @@ def get_token():
     password.send_keys(Keys.ENTER)
 
     token = driver.get_cookie('token')['value']
-
-    print(f"Token: {token}")
-    print(f"Data Type: {type(token)}")
-
     return token
 
 
