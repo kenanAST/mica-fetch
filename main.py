@@ -61,7 +61,7 @@ def main():
             try: 
                 if(student_info['message'] == 'Token is invalid' or prospectus['message' == 'Token is invalid']):
 
-                    print(f"Change Token at: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}")
+                    print(f'Change Token at: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}')
 
                     headers = {
                         "Authorization": get_token()
