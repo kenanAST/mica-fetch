@@ -11,10 +11,10 @@ def write_file(filename, data):
 
 def main():
 
-    token = get_token()
+    # token = get_token()
 
     headers = {
-        "Authorization" : token
+        "Authorization" : 'token'
     }
 
 
@@ -26,34 +26,60 @@ def main():
 
         write_file(f'prospectus/{idnum.split("-")[0]}/{idnum}.json', getProspectusResponse.text)
         write_file(f'student_info/{idnum.split("-")[0]}/{idnum}.json', getStudentResponse.text)
-
-        TokenChecker.append({"responses" : {[getStudentResponse, getProspectusResponse]}, "timestamp" : datetime.now().strftime("%d/%m/%Y %H:%M:%S") })        
+        
+        TokenChecker.append({"responses" : [getStudentResponse, getProspectusResponse]})        
         return [getStudentResponse, getProspectusResponse]
 
-    for i in range(2019, 2020):
-        for j in range(500, 520):
-            idnum = f"{str(i).zfill(4)}-{str(j).zfill(4)}"
+
+    for i in range(2019, 2021):
+        max_id = 10000
+        num_threads = 10
+
+        for j in range(0, 10, num_threads):
 
             TokenChecker = []
 
-            getStudentResponse, getProspectusResponse = fetch_data(idnum)
+            threads = []
+
+            for k in range(num_threads):
+                idnum = f"{str(i).zfill(4)}-{str(j + k).zfill(4)}"
+                t = threading.Thread(target=fetch_data, args=(idnum, TokenChecker,))
+                t.daemon = True
+                threads.append(t)
+            
+            for k in range(num_threads):
+                threads[k].start()
+
+            for k in range(num_threads):
+                threads[k].join()
 
             getStudentResponse, getProspectusResponse = TokenChecker[len(TokenChecker) - 1]['responses'] 
-            timestamp = TokenChecker[len(TokenChecker) - 1]['timestamp']
 
             student_info = json.loads(getStudentResponse.text)
             prospectus = json.loads(getProspectusResponse.text)
 
             try: 
                 if(student_info['message'] == 'Token is invalid' or prospectus['message' == 'Token is invalid']):
-                    print(f"Token Change @ {timestamp}")
                     headers = {
                         "Authorization": get_token()
                     }
 
-                    fetch_data(idnum)
+                    threads = []
+
+                    for k in range(num_threads):
+                        idnum = f"{str(i).zfill(4)}-{str(j + k).zfill(4)}"
+                        t = threading.Thread(target=fetch_data, args=(idnum, TokenChecker,))
+                        t.daemon = True
+                        threads.append(t)
+                    
+                    for k in range(num_threads):
+                        threads[k].start()
+
+                    for k in range(num_threads):
+                        threads[k].join()
             except:
                 pass
+                
     
 if __name__ == "__main__":
     main()
