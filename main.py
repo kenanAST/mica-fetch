@@ -20,9 +20,16 @@ def main():
 
     def fetch_data(idnum, TokenChecker):
         print(f"Fetching Student: {idnum}")
-        getStudentResponse = requests.get(f'https://micaapi.msuiit.edu.ph/api/info/v2/student/get_info?studid={idnum}', headers=headers)
-        getProspectusResponse = requests.get(f'https://micaapi.msuiit.edu.ph/api/info/v1/student/view/prospectus?studid={idnum}', headers=headers)
 
+        while True:
+            try:
+                getStudentResponse = requests.get(f'https://micaapi.msuiit.edu.ph/api/info/v2/student/get_info?studid={idnum}', headers=headers, timeout=10)
+                getProspectusResponse = requests.get(f'https://micaapi.msuiit.edu.ph/api/info/v1/student/view/prospectus?studid={idnum}', headers=headers, timeout=10)
+                
+                if(getStudentResponse.status_code == 200 and getProspectusResponse.status_code == 200):
+                    break
+            except:
+                print(f"Fetched Timeout on ID: {idnum}")
 
         write_file(f'prospectus/{idnum.split("-")[0]}/{idnum}.json', getProspectusResponse.text)
         write_file(f'student_info/{idnum.split("-")[0]}/{idnum}.json', getStudentResponse.text)
