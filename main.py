@@ -31,11 +31,11 @@ def main():
         return [getStudentResponse, getProspectusResponse]
 
 
-    for i in range(2019, 2021):
+    for i in range(2019, 2025):
         max_id = 10000
-        num_threads = 10
+        num_threads = 50
 
-        for j in range(0, 10, num_threads):
+        for j in range(0, max_id, num_threads):
 
             TokenChecker = []
 
