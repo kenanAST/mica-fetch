@@ -23,10 +23,12 @@ def main():
 
         while True:
             try:
-                getStudentResponse = requests.get(f'https://micaapi.msuiit.edu.ph/api/info/v2/student/get_info?studid={idnum}', headers=headers, timeout=10)
-                getProspectusResponse = requests.get(f'https://micaapi.msuiit.edu.ph/api/info/v1/student/view/prospectus?studid={idnum}', headers=headers, timeout=10)
-                
-                if(getStudentResponse.status_code == 200 and getProspectusResponse.status_code == 200):
+                getStudentResponse = requests.get(f'https://micaapi.msuiit.edu.ph/api/info/v2/student/get_info?studid={idnum}', headers=headers, timeout=(3.05, 5))
+                getProspectusResponse = requests.get(f'https://micaapi.msuiit.edu.ph/api/info/v1/student/view/prospectus?studid={idnum}', headers=headers, timeout=(3.05, 5))
+
+                student_status_code = getStudentResponse.status_code
+                prospectus_status_code = getProspectusResponse.status_code
+                if((student_status_code == 200 and prospectus_status_code == 200) or (student_status_code == 500 or prospectus_status_code == 500 )):
                     break
             except:
                 print(f"Fetched Timeout on ID: {idnum}")
