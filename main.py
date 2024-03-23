@@ -11,15 +11,15 @@ def write_file(filename, data):
 
 def main():
 
-    # token = get_token()
+    token = get_token()
 
     headers = {
-        "Authorization" : 'token'
+        "Authorization" : token
     }
 
 
     def fetch_data(idnum, TokenChecker):
-
+        print(f"Fetching Student: {idnum}")
         getStudentResponse = requests.get(f'https://micaapi.msuiit.edu.ph/api/info/v2/student/get_info?studid={idnum}', headers=headers)
         getProspectusResponse = requests.get(f'https://micaapi.msuiit.edu.ph/api/info/v1/student/view/prospectus?studid={idnum}', headers=headers)
 
@@ -60,6 +60,9 @@ def main():
 
             try: 
                 if(student_info['message'] == 'Token is invalid' or prospectus['message' == 'Token is invalid']):
+
+                    print(f"Change Token at: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}")
+
                     headers = {
                         "Authorization": get_token()
                     }
@@ -79,6 +82,8 @@ def main():
                         threads[k].join()
             except:
                 pass
+    
+    print("Fetching Done.")
                 
     
 if __name__ == "__main__":
